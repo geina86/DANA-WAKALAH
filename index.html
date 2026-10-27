@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dana Wakalah JKE — POLISAS</title>
+  <style>
+    :root {
+      --primary:     #1d4ed8;
+      --primary-lt:  #dbeafe;
+      --primary-dk:  #1e40af;
+      --gold:        #b45309;
+      --gold-lt:     #fef3c7;
+      --green:       #15803d;
+      --green-lt:    #dcfce7;
+      --red:         #dc2626;
+      --red-lt:      #fee2e2;
+      --gray:        #6b7280;
+      --gray-lt:     #f3f4f6;
+      --white:       #ffffff;
+      --text:        #111827;
+      --muted:       #6b7280;
+      --border:      #e5e7eb;
+      --shadow:      0 2px 10px rgba(0,0,0,0.08);
+      --radius:      12px;
+      --font:        -apple-system,"Segoe UI",system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font);background:#eff6ff;color:var(--text);min-height:100vh;}
+
+    header{background:linear-gradient(135deg,var(--primary-dk),var(--primary));color:var(--white);padding:18px 32px;display:flex;align-items:center;gap:14px;box-shadow:0 3px 12px rgba(0,0,0,.2);}
+    .hdr-icon{width:46px;height:46px;background:rgba(255,255,255,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+    .hdr-text h1{font-size:1.25rem;font-weight:800;}
+    .hdr-text p{font-size:.8rem;opacity:.8;margin-top:2px;}
+    .hdr-date{margin-left:auto;font-size:.8rem;opacity:.85;text-align:right;}
+
+    .tab-bar{background:var(--white);border-bottom:2px solid var(--border);display:flex;padding:0 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.06);overflow-x:auto;}
+    .tab-btn{padding:13px 18px;font-size:.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
+    .tab-btn:hover{color:var(--primary);}
+    .tab-btn.active{color:var(--primary-dk);border-bottom-color:var(--primary);}
+    .tbadge{font-size:.68rem;padding:2px 8px;border-radius:99px;font-weight:700;background:var(--primary-lt);color:var(--primary-dk);}
+
+    .panel{display:none;max-width:1200px;margin:26px auto;padding:0 22px 52px;}
+    .panel.active{display:block;}
+
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:22px;}
+    .scard{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;border:1px solid var(--border);border-left:4px solid var(--primary);}
+    .scard .sl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+    .scard .sv{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1;margin-top:3px;}
+    .scard .ss{font-size:.73rem;color:var(--muted);margin-top:2px;}
+
+    .slabel{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:20px 0 10px;display:flex;align-items:center;gap:10px;}
+    .slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;border:1px solid var(--border);margin-bottom:20px;}
+    .chead{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+    .cicon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+    .ctitle{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+    .caction{font-size:.76rem;font-weight:600;color:var(--primary);background:var(--primary-lt);border:none;padding:5px 12px;border-radius:6px;cursor:pointer;}
+    .caction:hover{background:var(--primary);color:var(--white);}
+    .caction.gold{color:var(--gold);background:var(--gold-lt);}
+    .caction.gold:hover{background:var(--gold);color:var(--white);}
+    .ml-auto{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    @media(max-width:760px){.two-col{grid-template-columns:1fr;}}
+
+    /* DRAW BOX */
+    .draw-box{text-align:center;padding:24px 20px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;border:2px dashed #93c5fd;margin-bottom:20px;}
+    .draw-box h3{font-size:1rem;font-weight:700;color:var(--primary-dk);margin-bottom:6px;}
+    .draw-box p{font-size:.82rem;color:var(--muted);margin-bottom:16px;}
+    .draw-controls{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+    .draw-controls label{font-size:.82rem;font-weight:600;}
+    .draw-controls select,.draw-controls input[type="number"]{padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:.84rem;font-family:var(--font);outline:none;}
+    .draw-controls select:focus,.draw-controls input:focus{border-color:var(--primary);}
+    .btn-draw{background:linear-gradient(135deg,var(--primary),var(--primary-dk));color:var(--white);border:none;padding:10px 26px;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--font);box-shadow:0 2px 8px rgba(29,78,216,.3);}
+    .btn-draw:hover{opacity:.9;}
+    .btn-draw:active{transform:scale(.98);}
+
+    /* RESULT */
+    .result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:16px;}
+    .rc{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;align-items:flex-start;gap:11px;box-shadow:0 1px 4px rgba(0,0,0,.06);animation:fi .35s ease;}
+    @keyframes fi{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+    .rc-num{width:28px;height:28px;background:var(--primary);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;}
+    .rc-body{flex:1;min-width:0;}
+    .rc-name{font-size:.86rem;font-weight:700;line-height:1.3;}
+    .rc-meta{font-size:.73rem;color:var(--muted);margin-top:3px;line-height:1.5;}
+
+    /* TABLE */
+    .twrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:.8rem;}
+    thead th{background:var(--gray-lt);padding:8px 10px;text-align:left;font-size:.71rem;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;}
+    tbody td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover td{background:#f0f7ff;}
+    tr.ts1 td:first-child{border-left:3px solid #be185d;}
+    tr.ts2 td:first-child{border-left:3px solid #7c3aed;}
+    tr.ts3 td:first-child{border-left:3px solid #1d4ed8;}
+    tr.ts4 td:first-child{border-left:3px solid #15803d;}
+    tr.ts5 td:first-child{border-left:3px solid #b45309;}
+
+    /* TANGGA BADGE */
+    .tbg{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.68rem;font-weight:700;border:1.5px solid;}
+    .tbg.S1{color:#be185d;border-color:#be185d;background:#fce7f3;}
+    .tbg.S2{color:#7c3aed;border-color:#7c3aed;background:#ede9fe;}
+    .tbg.S3{color:#1d4ed8;border-color:#1d4ed8;background:#dbeafe;}
+    .tbg.S4{color:#15803d;border-color:#15803d;background:#dcfce7;}
+    .tbg.S5{color:#b45309;border-color:#b45309;background:#fef3c7;}
+
+    /* STATUS BADGE */
+    .sbg{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:.71rem;font-weight:600;}
+    .sbg::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+    .sbg.lulus{background:var(--green-lt);color:var(--green);}
+    .sbg.ditolak{background:var(--red-lt);color:var(--red);}
+    .sbg.menunggu{background:var(--gold-lt);color:var(--gold);}
+
+    /* FILTER */
+    .filter-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;align-items:center;}
+    .filter-row span{font-size:.78rem;font-weight:600;color:var(--muted);}
+    .fbtn{padding:4px 12px;border-radius:99px;border:1.5px solid var(--border);background:var(--white);font-size:.75rem;font-weight:600;cursor:pointer;color:var(--muted);}
+    .fbtn:hover,.fbtn.active{border-color:var(--primary);background:var(--primary-lt);color:var(--primary-dk);}
+
+    /* FORM */
+    .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:540px){.fgrid{grid-template-columns:1fr;}}
+    .fg{display:flex;flex-direction:column;gap:3px;}
+    .fg.s2{grid-column:1/-1;}
+    .fg label{font-size:.75rem;font-weight:600;color:var(--muted);}
+    .fg input,.fg select,.fg textarea{padding:8px 10px;font-size:.84rem;border:1.5px solid var(--border);border-radius:7px;outline:none;font-family:var(--font);transition:border-color .2s;}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary);}
+    .fg textarea{resize:vertical;min-height:52px;}
+    .fsec{grid-column:1/-1;font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--primary);background:var(--primary-lt);padding:5px 11px;border-radius:5px;margin-top:6px;}
+    .factions{display:flex;gap:10px;justify-content:flex-end;margin-top:13px;}
+    .btn{padding:8px 18px;border-radius:8px;font-size:.82rem;font-weight:700;border:none;cursor:pointer;font-family:var(--font);}
+    .btn-p{background:var(--primary);color:var(--white);}
+    .btn-p:hover{background:var(--primary-dk);}
+    .btn-g{background:var(--gray-lt);color:var(--gray);}
+    .btn-g:hover{background:var(--border);}
+    .btn-sm{padding:4px 10px;font-size:.72rem;}
+
+    /* REKOD STRIP */
+    .rstrip{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+    .rstrip:last-child{border-bottom:none;}
+    .rstrip-num{width:24px;height:24px;background:var(--primary);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;flex-shrink:0;}
+    .rstrip-body{flex:1;}
+    .rstrip-name{font-size:.84rem;font-weight:700;}
+    .rstrip-meta{font-size:.72rem;color:var(--muted);margin-top:1px;}
+
+    /* MODAL */
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:16px;}
+    .overlay.open{display:flex;}
+    .modal{background:var(--white);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);width:100%;max-width:720px;max-height:92vh;overflow-y:auto;}
+    .mhead{display:flex;align-items:center;gap:11px;padding:15px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:1;}
+    .mhead h2{font-size:.95rem;font-weight:700;flex:1;}
+    .mclose{width:28px;height:28px;border-radius:6px;border:none;background:var(--gray-lt);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+    .mbody{padding:20px;}
+    .mfoot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+
+    /* BORANG PRINT */
+    .bsec{border:1px solid var(--border);border-radius:8px;padding:15px;margin-bottom:13px;}
+    .bsec-title{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--primary);margin-bottom:11px;}
+    .bfield{display:flex;gap:0;margin-bottom:9px;align-items:flex-start;}
+    .bfield .blbl{font-size:.79rem;font-weight:600;min-width:175px;padding-top:2px;flex-shrink:0;}
+    .bfield .bval{flex:1;border-bottom:1px solid #ccc;min-height:20px;padding:0 5px;font-size:.84rem;}
+    .sig-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px;}
+    .sig-box{border:1px solid var(--border);border-radius:6px;padding:10px 12px;}
+    .sig-box .st{font-size:.73rem;font-weight:700;color:var(--primary);margin-bottom:5px;text-transform:uppercase;}
+    .sig-box .ss2{height:34px;border-bottom:1px dotted #aaa;margin-bottom:5px;}
+    .sig-box .si{font-size:.73rem;color:var(--muted);}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--text);color:var(--white);padding:11px 18px;border-radius:8px;font-size:.84rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
+    #toast.show{opacity:1;transform:translateY(0);}
+
+    .empty{text-align:center;padding:26px;color:var(--muted);font-size:.85rem;}
+    .empty .ei{font-size:1.8rem;margin-bottom:7px;}
+
+    @media print{
+      .tab-bar,.draw-box,.filter-row,.factions,.caction,.btn-draw,#toast,.btn{display:none!important;}
+      .panel{display:block!important;}
+      body{background:white;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-icon">🌙</div>
+  <div class="hdr-text">
+    <h1>DANA WAKALAH JKE — POLISAS</h1>
+    <p>Sistem Pemilihan Rawak Penerima Sumbangan · Jabatan Kejuruteraan Elektrik</p>
+  </div>
+  <div class="hdr-date" id="live-date"></div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('s2_2627',this)">📋 Sesi 2 2026/2027 <span class="tbadge" id="badge-s2_2627">0 dipilih</span></button>
+  <button class="tab-btn" onclick="switchTab('s1_2728',this)">📋 Sesi 1 2027/2028 <span class="tbadge" id="badge-s1_2728">0 dipilih</span></button>
+  <button class="tab-btn" onclick="switchTab('s2_2728',this)">📋 Sesi 2 2027/2028 <span class="tbadge" id="badge-s2_2728">0 dipilih</span></button>
+</nav>
+
+<div id="panels"></div>
+
+<!-- MODAL BORANG -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mhead">
+      <span style="font-size:1.1rem">📄</span>
+      <h2 id="m-title">Borang Dana Wakalah</h2>
+      <button class="mclose" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbody" id="m-body"></div>
+    <div class="mfoot">
+      <button class="btn btn-g" onclick="closeModal()">Tutup</button>
+      <button class="btn btn-p" onclick="window.print()">🖨️ Cetak Borang</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═══ SESSIONS ═══ */
+const SESSIONS = [
+  {id:"s2_2627", label:"Sesi 2 2026/2027", short:"S2-2026-27"},
+  {id:"s1_2728", label:"Sesi 1 2027/2028", short:"S1-2027-28"},
+  {id:"s2_2728", label:"Sesi 2 2027/2028", short:"S2-2027-28"},
+];
+
+/* ═══ DATA PELAJAR ═══
+   Tangga S1 = keperluan tertinggi (gaji rendah)
+   Ain boleh tambah/edit data di sini
+═══════════════════════ */
+const POOL_BASE = [
+  {id:1,  nama:"NUR ALISSA SABRINA BINTI MOHD SABRI",        kp:"060227100474", no:"02DTK24F1046", kelas:"DTK5B", pa:"NORAIZAN BINTI IBRAHIM",           tangga:"S5", jumlah:300},
+  {id:2,  nama:"MOHAMAD SYAHMI BIN ABDUL PATAS",             kp:"070628060433", no:"02DEE25F1009", kelas:"DEE3B", pa:"AHMAD ZAIRI BIN MOHD ZAIN",         tangga:"S3", jumlah:300},
+  {id:3,  nama:"MUHAMMAD ISTAKHRI MAARRI BIN ABDUL RUZAK",   kp:"050706060263", no:"02DTK25F1068", kelas:"DTK3B", pa:"AHMAD FARID BIN MOHAMAD @ JAFFAR",  tangga:"S3", jumlah:510},
+  {id:4,  nama:"MUHAMMAD HAKIMI BIN DUSI",                   kp:"060412060179", no:"02DEE24F1008", kelas:"DEE5D", pa:"SITI NORSURAYA BINTI MOHD NOR",      tangga:"S5", jumlah:350},
+  {id:5,  nama:"WAN AMEER MIRZA BIN WAN RUZILAH",            kp:"060912110443", no:"02DEE24F1030", kelas:"DEE5C", pa:"NURUL SYAHIDA BINTI AHMAD HAZMI",    tangga:"S5", jumlah:400},
+  {id:6,  nama:"KHAIRUL AZIMAN BIN KHAIRUL ANUAR",           kp:"080630060503", no:"02DEE26F1008", kelas:"DEE1D", pa:"SHELLIE SUZANA BINTI SAAD",          tangga:"S5", jumlah:425},
+  {id:7,  nama:"AMIRUL AFIQ BIN MOHD ZAID",                  kp:"061107030971", no:"02DEE24F1004", kelas:"DEE5D", pa:"SITI NORSURAYA BINTI MOHD NOR",      tangga:"S5", jumlah:500},
+  {id:8,  nama:"AHMAD DAIYAN BIN BULONG KAHAR",              kp:"040706030313", no:"02DEE24F2007", kelas:"DEE4A", pa:"NURULAIN BT AHMAD",                  tangga:"S5", jumlah:500},
+  {id:9,  nama:"SHAZARUL NAZIMI BIN ROZMI",                  kp:"070123030327", no:"02DEE25F1017", kelas:"DEE3B", pa:"AHMAD ZAIRI BIN MOHD ZAIN",          tangga:"S3", jumlah:500},
+  {id:10, nama:"UMAR BIN UBAIDILLAH",                        kp:"051002030343", no:"02DTK25F1073", kelas:"DTK3A", pa:"FAUZIANNA BINTI AWANG",              tangga:"S3", jumlah:500},
+  {id:11, nama:"MUHAMMAD DANISH NAQEB BIN HABIB BOURGUIBA",  kp:"050627101215", no:"02DEE25F2020", kelas:"DEE1A", pa:"RATINAH BINTI JAAFAR",               tangga:"S3", jumlah:500},
+  {id:12, nama:"MUHAMMAD AFIQ ZUFAYRI BIN MOHD ZAWAWI",      kp:"080616060267", no:"02DEE26F1149", kelas:"DEE1C", pa:"ROHAIZAN BIN SAHER",                 tangga:"S3", jumlah:500},
+  {id:13, nama:"MUHAMMAD DANISH HAIKAL BIN IEZAM",           kp:"081206140701", no:"02DEP26F1012", kelas:"DEP1B", pa:"HAZILA BINTI ABDULLAH @ HASSIM",     tangga:"S1", jumlah:500},
+  {id:14, nama:"MUHAMAD FAIZ HAKIMI BIN FAIZAL",             kp:"080621030513", no:"02DEP26F1058", kelas:"DEP1A", pa:"NUUR MAISYA BINTI MAZNI",            tangga:"S1", jumlah:500},
+  {id:15, nama:"MUHAMMAD SYAQIR IMAN BIN SUHAIMI",           kp:"080520110223", no:"02DEP26F1074", kelas:"DEP1C", pa:"LIAN AI FANG",                       tangga:"S1", jumlah:500},
+  {id:16, nama:"MUHAMMAD NUH ADAM BIN HARUN",                kp:"080427110165", no:"02DEP26F1101", kelas:"DEP1C", pa:"LIAN AI FANG",                       tangga:"S1", jumlah:500},
+  {id:17, nama:"MUHAMMAD FAHIM BIN RANI @ ABDULLAH RANI",    kp:"080430060613", no:"02DEP26F1131", kelas:"DEP1D", pa:"ZURAIDA BINTI OSMAN",                tangga:"S1", jumlah:500},
+  {id:18, nama:"NUR AINA ADRIANA BINTI AZMAN",               kp:"080929060604", no:"02DTK26F1006", kelas:"DTK1A", pa:"NOR HIDAYATI BINTI IDRIS",           tangga:"S1", jumlah:500},
+  {id:19, nama:"MUHAMMAD FAIZ AIMAN BIN SALLEH",             kp:"060321060405", no:"02DEE24F1060", kelas:"DEE5D", pa:"SITI NORSURAYA BINTI MOHD NOR",      tangga:"S5", jumlah:500},
+  {id:20, nama:"MUHAMMAD SYAFIQ BIN MOHD SUHAIMI",           kp:"071219160147", no:"02DEE24F1014", kelas:"DEE3A", pa:"AZIMAH BINTI JUSOH @ ALIAS",         tangga:"S5", jumlah:500},
+  {id:21, nama:"MUHAMMAD IKHWAN BIN HASMI",                  kp:"",             no:"02DEE25F1075", kelas:"DEE3A", pa:"-",                                  tangga:"S3", jumlah:500},
+  {id:22, nama:"HURAISHA BALQIS BINTI SANI",                 kp:"",             no:"02DTK25F1099", kelas:"DTK3B", pa:"-",                                  tangga:"S3", jumlah:600},
+  {id:23, nama:"MUHAMMAD AFIQ MOHD NORHASRUDINASRI",         kp:"",             no:"02DTK25F1074", kelas:"DTK3B", pa:"-",                                  tangga:"S3", jumlah:600},
+  {id:24, nama:"AHIR ASHRAF BIN JUNORUDIN",                  kp:"",             no:"02DTK25F1054", kelas:"DTK3B", pa:"-",                                  tangga:"S5", jumlah:600},
+  {id:25, nama:"HIDAYAH HII BINTI MUHAMMAD ISKHANDAR HII",   kp:"",             no:"02DEE24F1047", kelas:"DEE5D", pa:"-",                                  tangga:"S5", jumlah:600},
+  {id:26, nama:"PRIESYTIA BINTI MUHAYYIAH",                  kp:"",             no:"02DEE26F1040", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:600},
+  {id:27, nama:"MUHAMAD NOR AZRI BIN MOHAMAD FAISOL",        kp:"",             no:"02DEE26F1110", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:600},
+  {id:28, nama:"ROSNADHIRA FITRIENA BINTI ROSLI",            kp:"",             no:"02DEE24F1029", kelas:"DEE4A", pa:"-",                                  tangga:"S1", jumlah:600},
+  {id:29, nama:"MUHAMMAD AIDIL BIN ZAINAL ABIDIN",           kp:"",             no:"02DEE26F1059", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:600},
+  {id:30, nama:"MUHAMAD IKHWAN BIN MOHD YUSOPP HAIRUZZAMAN", kp:"",             no:"02DEE24F1006", kelas:"DEE5A", pa:"-",                                  tangga:"S1", jumlah:600},
+  {id:31, nama:"NUR ALIA ALISYA BINTI ABU AHAR",             kp:"",             no:"02DEE26F1095", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:700},
+  {id:32, nama:"SAKINATUS SOFIYYAH BINTI ZAKARIA",           kp:"",             no:"02DTK24F1027", kelas:"DTK5B", pa:"-",                                  tangga:"S3", jumlah:700},
+  {id:33, nama:"MUHAMAD HAZIRUL HAZIM BIN IDYHAFIZY",        kp:"",             no:"02DEE26F1052", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:700},
+  {id:34, nama:"MUHAMAD FAUZAN BIN YUSOF",                   kp:"",             no:"02DEE24F1065", kelas:"DEE4B", pa:"-",                                  tangga:"S1", jumlah:700},
+  {id:35, nama:"MUHAMAD BID BIN MOHD RIDUAN",                kp:"",             no:"02DEE25F1031", kelas:"DEE3A", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:36, nama:"MUHAMAD HARIZ AFIF BIN MOHD NAZRI",          kp:"",             no:"02DEE26F1031", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:37, nama:"RABIATULADADAWIAYAH BINTI MAHALDER",         kp:"",             no:"02DEE25F1052", kelas:"DEE3B", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:38, nama:"KANNIGA A/P VASANTAKUMAR",                   kp:"",             no:"02DEE25F1002", kelas:"DEE3A", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:39, nama:"MUHAMAD AHEERUL BIN HAKIM ABDUL RAZAK",      kp:"",             no:"02DEE26F1010", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:40, nama:"MUHAMAD HAFIZ BIN HASLI",                    kp:"",             no:"02DEE26F1133", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:41, nama:"MUHAMAD IKHWAN BIN SHAHAIN AZMI",            kp:"",             no:"02DEE26F1136", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:42, nama:"ZIKRY HAFIFI BIN ZAMRAN",                    kp:"",             no:"02DEE26F1110", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:43, nama:"NURDALILA BALQIS BINTI FAFIAN HAZIZAN",      kp:"",             no:"02DEP26F1061", kelas:"DEP1B", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:44, nama:"CHE WAN MUHAMAD FAHRIN BIN ASTAGHANA",       kp:"",             no:"02DEP26F1049", kelas:"DEP1A", pa:"-",                                  tangga:"S1", jumlah:800},
+  {id:45, nama:"MUHAMAD ADIB FADZILLAH BIN KAMAL",           kp:"",             no:"02DEP26F1001", kelas:"DEP1A", pa:"-",                                  tangga:"S1", jumlah:850},
+  {id:46, nama:"NUR FARAH AIN BINTI ABDULLAH",               kp:"",             no:"02DEE26F1023", kelas:"DEE1A", pa:"-",                                  tangga:"S1", jumlah:850},
+  {id:47, nama:"NUR HUVAINA BINTI LOKMAN",                   kp:"",             no:"02DEE25F1047", kelas:"DEE3B", pa:"-",                                  tangga:"S1", jumlah:850},
+  {id:48, nama:"MUHAMMAD ADAM IQISTI BIN ISKARUDDIN",        kp:"",             no:"02DEE26F1100", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:900},
+  {id:49, nama:"MUHAMAD NAZHIM BIN MOHAMAD HATTA",           kp:"",             no:"02DEE26F1103", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:900},
+  {id:50, nama:"ADAM HAFIZ BIN ZULKIFLI",                    kp:"",             no:"02DEP26F1013", kelas:"DEP1B", pa:"-",                                  tangga:"S1", jumlah:900},
+  {id:51, nama:"NUR IFEAH SYAHIRA BINTI MUHAMAMAD",          kp:"",             no:"02DEP26F1043", kelas:"DEP1A", pa:"-",                                  tangga:"S1", jumlah:900},
+  {id:52, nama:"MUHAMAD LUQMAN SHAH BIN SHAHRWAN",           kp:"",             no:"02DEE25F1014", kelas:"DEE3A", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:53, nama:"AHMAD AZIEF BIN OTHMAN",                     kp:"",             no:"02DEE26F1044", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:54, nama:"MUHAMMAD NABIEL EZZANYI BIN MOHD DZHARI",    kp:"",             no:"02DEE24F1002", kelas:"DEE5A", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:55, nama:"MUHAMMAD KHAIRUL BIN ABDUL HAMID",           kp:"",             no:"02DEE26F1039", kelas:"DEE1B", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:56, nama:"MUHMMAD ASYRAF BIN ABDULLAH",                kp:"",             no:"02DEE26F1056", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:57, nama:"AHMAD AUFA DZIHAR BIN AHMAD PETRI",          kp:"",             no:"02DEE26F1052", kelas:"DEE1C", pa:"-",                                  tangga:"S1", jumlah:1000},
+  {id:58, nama:"MUHAMAD NAIM BIN YA",                        kp:"",             no:"02DTK24F1002", kelas:"DTK5B", pa:"-",                                  tangga:"S3", jumlah:1000},
+  {id:59, nama:"LUGENDIRAN A/L SOORIAPRAKASAM",              kp:"",             no:"02DTK25F1065", kelas:"DTK3A", pa:"-",                                  tangga:"S5", jumlah:1500},
+  {id:60, nama:"MUHAMAD HADIDI HURSY DIN BIN MD YUSOF",      kp:"",             no:"02DEP26F1022", kelas:"DEP1A", pa:"-",                                  tangga:"S1", jumlah:1000},
+];
+
+const SESI_DATA    = {s2_2627:[...POOL_BASE], s1_2728:[...POOL_BASE], s2_2728:[...POOL_BASE]};
+const SELECTED     = {s2_2627:[], s1_2728:[], s2_2728:[]};
+const BORANG_REKOD = {s2_2627:[], s1_2728:[], s2_2728:[]};
+
+// Simpan ID pelajar yang PERNAH dipilih merentas SEMUA sesi
+// { id -> [sid, sid, ...] }
+const EVER_SELECTED = {};
+
+function markEverSelected(sid){
+  SELECTED[sid].forEach(p=>{
+    if(!EVER_SELECTED[p.id]) EVER_SELECTED[p.id]=[];
+    if(!EVER_SELECTED[p.id].includes(sid)) EVER_SELECTED[p.id].push(sid);
+  });
+}
+
+function pernah(pid){
+  return EVER_SELECTED[pid] ? EVER_SELECTED[pid] : [];
+}
+
+function pernahLabel(pid){
+  const sids = pernah(pid);
+  if(!sids.length) return "";
+  return sids.map(s=>SESSIONS.find(x=>x.id===s)?.short||s).join(", ");
+}
+
+/* ═══ HELPERS ═══ */
+const toast = msg => {const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);};
+const todayVal = () => new Date().toISOString().split("T")[0];
+const shuffle  = arr => {const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const sesLabel = sid => SESSIONS.find(s=>s.id===sid)?.label||sid;
+const sesShort = sid => SESSIONS.find(s=>s.id===sid)?.short||sid;
+
+/* ═══ BUILD PANELS ═══ */
+function buildPanels(){
+  document.getElementById("panels").innerHTML = SESSIONS.map((s,i)=>`
+    <section class="panel ${i===0?"active":""}" id="panel-${s.id}">
+      <div class="stats-row" id="stats-${s.id}"></div>
+
+      <div class="draw-box">
+        <h3>🎲 Cabutan Rawak Penerima Dana Wakalah — ${s.label}</h3>
+        <p>Pelajar dipilih secara rawak. Tapis mengikut tangga keutamaan untuk utamakan pelajar S1 (keperluan tertinggi).</p>
+        <div class="draw-controls">
+          <label>Tangga:</label>
+          <select id="tf-${s.id}">
+            <option value="all">Semua Tangga</option>
+            <option value="S1">S1 (Keperluan Tertinggi)</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+            <option value="S4">S4</option>
+            <option value="S5">S5</option>
+          </select>
+          <label>Bil. dipilih:</label>
+          <input type="number" id="ns-${s.id}" value="20" min="1" max="200" style="width:68px"/>
+          <button class="btn-draw" onclick="runDraw('${s.id}')">🎲 Jalankan Cabutan</button>
+          <button class="btn btn-g" style="padding:10px 14px" onclick="clearDraw('${s.id}')">✕ Reset</button>
+        </div>
+      </div>
+
+      <div id="result-${s.id}"></div>
+
+      <div class="slabel">👥 Senarai Pool Pelajar — ${s.label}</div>
+      <div class="card">
+        <div class="chead">
+          <div class="cicon" style="background:var(--primary-lt)">👥</div>
+          <div class="ctitle">Senarai Pelajar Layak Dipilih</div>
+          <div class="ml-auto">
+            <button class="caction" onclick="exportCSV('${s.id}')">⬇ Eksport CSV</button>
+            <button class="caction gold" onclick="exportSelected('${s.id}')">⭐ Eksport Terpilih</button>
+          </div>
+        </div>
+        <div class="filter-row" id="fr-${s.id}">
+          <span>Tapis Tangga:</span>
+          <button class="fbtn active" onclick="filterTbl('${s.id}','all',this)">Semua</button>
+          <button class="fbtn" onclick="filterTbl('${s.id}','S1',this)">S1</button>
+          <button class="fbtn" onclick="filterTbl('${s.id}','S2',this)">S2</button>
+          <button class="fbtn" onclick="filterTbl('${s.id}','S3',this)">S3</button>
+          <button class="fbtn" onclick="filterTbl('${s.id}','S4',this)">S4</button>
+          <button class="fbtn" onclick="filterTbl('${s.id}','S5',this)">S5</button>
+        </div>
+        <div class="twrap" id="tbl-${s.id}"></div>
+      </div>
+
+      <div class="slabel">📝 Borang Permohonan Dana Wakalah</div>
+      <div class="two-col">
+        <div class="card">
+          <div class="chead">
+            <div class="cicon" style="background:#fce7f3">📝</div>
+            <div class="ctitle">Isi &amp; Simpan Borang</div>
+          </div>
+          <div id="bf-${s.id}"></div>
+        </div>
+        <div class="card">
+          <div class="chead">
+            <div class="cicon" style="background:var(--green-lt)">📁</div>
+            <div class="ctitle">Rekod Borang Diterima</div>
+            <button class="caction" style="margin-left:auto" onclick="exportBorang('${s.id}')">⬇ Eksport</button>
+          </div>
+          <div id="bl-${s.id}"></div>
+        </div>
+      </div>
+    </section>`).join("");
+}
+
+/* ═══ STATS ═══ */
+function renderStats(sid){
+  const d=SESI_DATA[sid], sel=SELECTED[sid];
+  const cnt  = t => d.filter(p=>p.tangga===t).length;
+  const nPernah = d.filter(p=>pernah(p.id).length>0).length;
+  const avail   = d.filter(p=>pernah(p.id).length===0).length;
+  document.getElementById("stats-"+sid).innerHTML=`
+    <div class="scard"><div class="sl">Jumlah Pool</div><div class="sv">${d.length}</div><div class="ss">${avail} belum pernah dapat</div></div>
+    <div class="scard" style="border-left-color:#be185d"><div class="sl">Tangga S1</div><div class="sv" style="color:#be185d">${cnt("S1")}</div><div class="ss">keutamaan tertinggi</div></div>
+    <div class="scard" style="border-left-color:#1d4ed8"><div class="sl">Tangga S3</div><div class="sv" style="color:#1d4ed8">${cnt("S3")}</div><div class="ss">pelajar</div></div>
+    <div class="scard" style="border-left-color:var(--red)"><div class="sl">Pernah Dapat</div><div class="sv" style="color:var(--red)">${nPernah}</div><div class="ss">tidak layak dipilih semula</div></div>
+    <div class="scard" style="border-left-color:var(--green)"><div class="sl">Telah Dipilih</div><div class="sv" style="color:var(--green)">${sel.length}</div><div class="ss">sesi ini</div></div>`;
+}
+
+/* ═══ TABLE ═══ */
+function renderTable(sid, tf="all"){
+  const sel = SELECTED[sid].map(p=>p.id);
+  const d   = tf==="all" ? SESI_DATA[sid] : SESI_DATA[sid].filter(p=>p.tangga===tf);
+  if(!d.length){document.getElementById("tbl-"+sid).innerHTML=`<div class="empty"><div class="ei">📭</div>Tiada data.</div>`;return;}
+  document.getElementById("tbl-"+sid).innerHTML=`
+    <table>
+      <thead><tr><th>#</th><th>No. KP</th><th>Nama Penuh</th><th>No. Pendaftaran</th><th>Kelas</th><th>Penasihat Akademik</th><th>Tangga</th><th>Gaji (RM)</th><th>Status</th><th></th></tr></thead>
+      <tbody>${d.map(p=>{
+        const sudahPernah = pernah(p.id);
+        const terpilihSini = sel.includes(p.id);
+        let rowBg = '';
+        if(terpilihSini) rowBg = 'style="background:#f0fdf4"';
+        else if(sudahPernah.length) rowBg = 'style="background:#fff7f7"';
+        const statusCell = sudahPernah.length
+          ? `<span style="color:var(--red);font-weight:700;font-size:.76rem">⛔ Pernah Dapat</span><br><span style="font-size:.68rem;color:var(--muted)">${pernahLabel(p.id)}</span>`
+          : terpilihSini
+            ? `<span style="color:var(--green);font-weight:700;font-size:.78rem">✓ Terpilih</span>`
+            : '';
+        return `
+        <tr class="ts${p.tangga[1]}" ${rowBg}>
+          <td style="color:var(--muted);font-size:.72rem">${p.id}</td>
+          <td style="font-size:.72rem;white-space:nowrap">${p.kp||"—"}</td>
+          <td style="font-weight:600;max-width:210px${sudahPernah.length?';color:var(--muted);text-decoration:line-through':''}">${p.nama}</td>
+          <td style="font-size:.74rem">${p.no}</td>
+          <td>${p.kelas}</td>
+          <td style="font-size:.74rem;max-width:150px">${p.pa}</td>
+          <td><span class="tbg ${p.tangga}">${p.tangga}</span></td>
+          <td style="font-weight:700;color:var(--primary)">RM ${p.jumlah.toLocaleString()}</td>
+          <td>${statusCell}</td>
+          <td>${sudahPernah.length?'':'<button class="btn btn-p btn-sm" onclick="openBorangModal(\''+sid+'\','+p.id+')">📄 Borang</button>'}</td>
+        </tr>`;
+      }).join("")}
+      </tbody>
+    </table>`;
+}
+
+/* ═══ DRAW ═══ */
+function runDraw(sid){
+  const n  = parseInt(document.getElementById("ns-"+sid).value)||20;
+  const tf = document.getElementById("tf-"+sid).value;
+
+  // Exclude pelajar yang pernah dapat dalam mana-mana sesi
+  let pool = SESI_DATA[sid].filter(p=>pernah(p.id).length===0);
+  if(tf!=="all") pool = pool.filter(p=>p.tangga===tf);
+
+  const excluded = SESI_DATA[sid].filter(p=>pernah(p.id).length>0).length;
+
+  if(!pool.length){
+    toast(`⚠️ Semua pelajar dalam kategori ini sudah pernah menerima dana. Cuba tangga lain.`);
+    return;
+  }
+
+  SELECTED[sid] = shuffle(pool).slice(0, Math.min(n, pool.length));
+
+  // Tandakan sebagai pernah dipilih
+  markEverSelected(sid);
+
+  document.getElementById("badge-"+sid).textContent = SELECTED[sid].length+" dipilih";
+
+  // Kemaskini semua panel (supaya panel lain juga tunjuk status terkini)
+  SESSIONS.forEach(s=>{
+    renderTable(s.id);
+    renderStats(s.id);
+  });
+  renderResult(sid);
+
+  const msg = excluded>0
+    ? `✅ ${SELECTED[sid].length} dipilih. ${excluded} pelajar dikecualikan (pernah dapat).`
+    : `✅ ${SELECTED[sid].length} pelajar telah dipilih secara rawak!`;
+  toast(msg);
+}
+
+function clearDraw(sid){
+  // Buang dari EVER_SELECTED juga supaya boleh pilih semula
+  SELECTED[sid].forEach(p=>{
+    if(EVER_SELECTED[p.id]){
+      EVER_SELECTED[p.id] = EVER_SELECTED[p.id].filter(s=>s!==sid);
+      if(EVER_SELECTED[p.id].length===0) delete EVER_SELECTED[p.id];
+    }
+  });
+  SELECTED[sid]=[];
+  document.getElementById("badge-"+sid).textContent="0 dipilih";
+  document.getElementById("result-"+sid).innerHTML="";
+  SESSIONS.forEach(s=>{ renderTable(s.id); renderStats(s.id); });
+  toast("🔄 Cabutan diset semula.");
+}
+
+/* ═══ RESULT ═══ */
+function renderResult(sid){
+  const sel=SELECTED[sid];
+  if(!sel.length){document.getElementById("result-"+sid).innerHTML="";return;}
+  document.getElementById("result-"+sid).innerHTML=`
+    <div class="card">
+      <div class="chead">
+        <div class="cicon" style="background:var(--gold-lt)">⭐</div>
+        <div class="ctitle">${sel.length} Penerima Terpilih — ${sesLabel(sid)}</div>
+        <div class="ml-auto">
+          <button class="caction gold" onclick="exportSelected('${sid}')">⬇ Eksport CSV</button>
+          <button class="caction" onclick="printSelected('${sid}')">🖨️ Cetak Senarai</button>
+        </div>
+      </div>
+      <div class="result-grid">
+        ${sel.map((p,i)=>`
+          <div class="rc">
+            <div class="rc-num">${i+1}</div>
+            <div class="rc-body">
+              <div class="rc-name">${p.nama}</div>
+              <div class="rc-meta">${p.no} · ${p.kelas}<br>PA: ${p.pa}<br>RM ${p.jumlah.toLocaleString()}</div>
+              <span class="tbg ${p.tangga}" style="margin-top:5px;display:inline-block">${p.tangga}</span>
+              <button class="btn btn-p btn-sm" style="margin-left:6px" onclick="openBorangModal('${sid}',${p.id})">📄 Borang</button>
+            </div>
+          </div>`).join("")}
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--green-lt);border-radius:8px;border:1px solid #86efac;font-size:.78rem;color:var(--green)">
+        ✅ Pelajar-pelajar ini akan ditanda <strong>"Pernah Dapat"</strong> dan <strong>tidak akan dipilih semula</strong> dalam sesi hadapan. Klik <strong>Reset</strong> untuk batalkan cabutan ini.
+      </div>
+    </div>`;
+}
+
+/* ═══ FILTER ═══ */
+function filterTbl(sid,tf,btn){
+  document.querySelectorAll(`#fr-${sid} .fbtn`).forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTable(sid,tf);
+}
+
+/* ═══ BORANG MODAL ═══ */
+function openBorangModal(sid,pid){
+  const p=SESI_DATA[sid].find(x=>x.id===pid); if(!p) return;
+  const noRef=`JKE-DW-${sesShort(sid)}-${String(pid).padStart(3,"0")}`;
+  document.getElementById("m-title").textContent=`Borang Dana Wakalah — ${p.nama}`;
+  document.getElementById("m-body").innerHTML=`
+    <div style="text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--border)">
+      <div style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)">Politeknik Sultan Haji Ahmad Shah (POLISAS)</div>
+      <div style="font-size:1.05rem;font-weight:800;color:var(--primary-dk);margin-top:3px">BORANG PERMOHONAN SUMBANGAN DANA WAKALAH</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:2px">Jabatan Kejuruteraan Elektrik &nbsp;|&nbsp; ${sesLabel(sid)}</div>
+      <div style="font-size:.73rem;color:var(--muted);margin-top:3px">No. Rujukan: <strong>${noRef}</strong></div>
+    </div>
+    <div class="bsec">
+      <div class="bsec-title">A — Maklumat Pelajar</div>
+      <div class="bfield"><span class="blbl">Nama Penuh</span><span class="bval">${p.nama}</span></div>
+      <div class="bfield"><span class="blbl">No. Kad Pengenalan</span><span class="bval">${p.kp||"________________________________"}</span></div>
+      <div class="bfield"><span class="blbl">No. Pendaftaran</span><span class="bval">${p.no}</span></div>
+      <div class="bfield"><span class="blbl">Kelas</span><span class="bval">${p.kelas}</span></div>
+      <div class="bfield"><span class="blbl">Penasihat Akademik</span><span class="bval">${p.pa!=="-"?p.pa:"________________________________"}</span></div>
+      <div class="bfield"><span class="blbl">Sesi Pengajian</span><span class="bval">${sesLabel(sid)}</span></div>
+    </div>
+    <div class="bsec">
+      <div class="bsec-title">B — Maklumat Kewangan Keluarga</div>
+      <div class="bfield"><span class="blbl">Nama Ibu/Bapa/Penjaga</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield"><span class="blbl">Pekerjaan</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield"><span class="blbl">Pendapatan Bulanan</span><span class="bval">RM ${p.jumlah.toLocaleString()} &nbsp;(Tangga ${p.tangga})</span></div>
+      <div class="bfield"><span class="blbl">Bilangan Tanggungan</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield"><span class="blbl">No. Telefon</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield"><span class="blbl">Alamat</span><span class="bval" style="min-height:36px">&nbsp;</span></div>
+    </div>
+    <div class="bsec">
+      <div class="bsec-title">C — Perakuan Pelajar</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:11px">Saya mengakui bahawa semua maklumat yang diberikan adalah benar. Saya bersetuju mematuhi syarat penerimaan Dana Wakalah.</p>
+      <div class="sig-row">
+        <div class="sig-box"><div class="st">Tandatangan Pelajar</div><div class="ss2"></div><div class="si">Nama: ${p.nama}</div><div class="si">Tarikh: ____________________</div></div>
+        <div class="sig-box"><div class="st">Tandatangan Ibu/Bapa/Penjaga</div><div class="ss2"></div><div class="si">Nama: ____________________</div><div class="si">Tarikh: ____________________</div></div>
+      </div>
+    </div>
+    <div class="bsec">
+      <div class="bsec-title">D — Ulasan &amp; Pengesahan Penasihat Akademik (PA)</div>
+      <div class="bfield"><span class="blbl">Nama PA</span><span class="bval">${p.pa!=="-"?p.pa:"________________________________"}</span></div>
+      <div class="bfield"><span class="blbl">Prestasi Akademik Pelajar</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield" style="align-items:flex-start"><span class="blbl">Ulasan PA</span><div class="bval" style="min-height:44px;border:1px solid #ddd;border-radius:4px;padding:4px">&nbsp;</div></div>
+      <div class="bfield"><span class="blbl">Keputusan Sokongan</span><span class="bval">☐ Disokong &nbsp;&nbsp;&nbsp; ☐ Tidak Disokong — Sebab: ____________________</span></div>
+      <div class="sig-row">
+        <div class="sig-box"><div class="st">Tandatangan PA</div><div class="ss2"></div><div class="si">Nama: ${p.pa!=="-"?p.pa:"____________________"}</div><div class="si">Tarikh: ____________________</div></div>
+        <div class="sig-box"><div class="st">Disahkan Ketua Jabatan</div><div class="ss2"></div><div class="si">Nama: ____________________</div><div class="si">Tarikh: ____________________</div></div>
+      </div>
+    </div>
+    <div class="bsec">
+      <div class="bsec-title">E — Kegunaan Pejabat Kebajikan Pelajar</div>
+      <div class="bfield"><span class="blbl">Tarikh Terima Borang</span><span class="bval">&nbsp;</span></div>
+      <div class="bfield"><span class="blbl">No. Siri Borang</span><span class="bval">${noRef}</span></div>
+      <div class="bfield"><span class="blbl">Status Permohonan</span><span class="bval">☐ Lulus &nbsp;&nbsp; ☐ Ditolak &nbsp;&nbsp; ☐ Menunggu Semakan</span></div>
+      <div class="bfield"><span class="blbl">Jumlah Sumbangan (RM)</span><span class="bval">&nbsp;</span></div>
+      <div style="margin-top:10px">
+        <div class="sig-box" style="max-width:320px">
+          <div class="st">Pegawai Kebajikan Pelajar</div>
+          <div class="ss2"></div>
+          <div class="si">Nama: Ain &nbsp;|&nbsp; Cop Rasmi</div>
+          <div class="si">Tarikh: ____________________</div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("overlay").classList.add("open");
+}
+function closeModal(){document.getElementById("overlay").classList.remove("open");}
+
+/* ═══ BORANG INLINE FORM ═══ */
+function renderBorangForm(sid){
+  document.getElementById("bf-"+sid).innerHTML=`
+    <div class="fgrid">
+      <div class="fsec">Maklumat Pelajar</div>
+      <div class="fg s2"><label>Nama Penuh Pelajar</label><input type="text" id="f-${sid}-nama" placeholder="Nama penuh seperti dalam kad pengenalan"/></div>
+      <div class="fg"><label>No. Kad Pengenalan</label><input type="text" id="f-${sid}-kp" placeholder="000000000000"/></div>
+      <div class="fg"><label>No. Pendaftaran</label><input type="text" id="f-${sid}-no" placeholder="02DEE26F1001"/></div>
+      <div class="fg"><label>Kelas</label><input type="text" id="f-${sid}-kelas" placeholder="DEE1A"/></div>
+      <div class="fg"><label>Tangga Gaji Ibu/Bapa</label>
+        <select id="f-${sid}-tangga">
+          <option value="S1">S1 — Keperluan Tertinggi</option>
+          <option value="S2">S2</option>
+          <option value="S3" selected>S3</option>
+          <option value="S4">S4</option>
+          <option value="S5">S5</option>
+        </select>
+      </div>
+      <div class="fsec">Maklumat Penasihat Akademik</div>
+      <div class="fg s2"><label>Nama Penasihat Akademik (PA)</label><input type="text" id="f-${sid}-pa" placeholder="Nama PA"/></div>
+      <div class="fg"><label>Sokongan PA</label>
+        <select id="f-${sid}-sokongan">
+          <option value="Disokong">Disokong</option>
+          <option value="Tidak Disokong">Tidak Disokong</option>
+        </select>
+      </div>
+      <div class="fg"><label>Tarikh Borang Diterima</label><input type="date" id="f-${sid}-tarikh" value="${todayVal()}"/></div>
+      <div class="fg s2"><label>Ulasan PA</label><textarea id="f-${sid}-ulasan" placeholder="Ulasan penasihat akademik..."></textarea></div>
+      <div class="fsec">Status Permohonan</div>
+      <div class="fg"><label>Status</label>
+        <select id="f-${sid}-status">
+          <option value="Menunggu">Menunggu Semakan</option>
+          <option value="Lulus">Lulus</option>
+          <option value="Ditolak">Ditolak</option>
+        </select>
+      </div>
+      <div class="fg"><label>Jumlah Sumbangan (RM)</label><input type="number" id="f-${sid}-jumlah" placeholder="0" step="50" min="0"/></div>
+    </div>
+    <div class="factions">
+      <button class="btn btn-g" onclick="clearBF('${sid}')">Kosongkan</button>
+      <button class="btn btn-p" onclick="submitBF('${sid}')">✚ Simpan Rekod</button>
+    </div>`;
+  renderBorangList(sid);
+}
+
+function submitBF(sid){
+  const g=k=>(document.getElementById(`f-${sid}-${k}`)||{value:""}).value||"";
+  const nama=g("nama").trim();
+  if(!nama){toast("⚠️ Sila masukkan nama pelajar.");return;}
+  BORANG_REKOD[sid].push({nama,kp:g("kp"),no:g("no"),kelas:g("kelas"),tangga:g("tangga"),pa:g("pa"),sokongan:g("sokongan"),tarikh:g("tarikh"),ulasan:g("ulasan"),status:g("status"),jumlah:g("jumlah")});
+  renderBorangList(sid);
+  clearBF(sid);
+  toast("✅ Rekod borang berjaya disimpan!");
+}
+
+function clearBF(sid){
+  ["nama","kp","no","kelas","pa","ulasan","jumlah"].forEach(k=>{const el=document.getElementById(`f-${sid}-${k}`);if(el)el.value="";});
+  const td=document.getElementById(`f-${sid}-tarikh`);if(td)td.value=todayVal();
+}
+
+function renderBorangList(sid){
+  const recs=BORANG_REKOD[sid];
+  const el=document.getElementById("bl-"+sid);
+  if(!recs.length){el.innerHTML=`<div class="empty"><div class="ei">📭</div>Tiada rekod borang lagi.</div>`;return;}
+  el.innerHTML=recs.map((r,i)=>`
+    <div class="rstrip">
+      <div class="rstrip-num">${i+1}</div>
+      <div class="rstrip-body">
+        <div class="rstrip-name">${r.nama}</div>
+        <div class="rstrip-meta">${r.no} · ${r.kelas} · <span class="tbg ${r.tangga}" style="font-size:.64rem">${r.tangga}</span> · <span class="sbg ${r.status.toLowerCase().replace(" semakan","")}">${r.status}</span></div>
+      </div>
+    </div>`).join("");
+}
+
+/* ═══ EXPORT ═══ */
+function exportCSV(sid){
+  const hdr=["Bil","No.KP","Nama","No.Pendaftaran","Kelas","PA","Tangga","Gaji(RM)"];
+  const rows=SESI_DATA[sid].map((p,i)=>[i+1,p.kp,`"${p.nama}"`,p.no,p.kelas,`"${p.pa}"`,p.tangga,p.jumlah].join(","));
+  dlCSV([hdr.join(","),...rows].join("\n"),`Pool-DanaWakalah-${sesShort(sid)}.csv`);
+  toast("📥 Pool pelajar berjaya dimuat turun!");
+}
+
+function exportSelected(sid){
+  if(!SELECTED[sid].length){toast("⚠️ Jalankan cabutan dahulu.");return;}
+  const hdr=["Bil","No.KP","Nama","No.Pendaftaran","Kelas","PA","Tangga","Gaji(RM)"];
+  const rows=SELECTED[sid].map((p,i)=>[i+1,p.kp,`"${p.nama}"`,p.no,p.kelas,`"${p.pa}"`,p.tangga,p.jumlah].join(","));
+  const title=`SENARAI PENERIMA SUMBANGAN DANA WAKALAH ${sesLabel(sid).toUpperCase()} - JABATAN KEJURUTERAAN ELEKTRIK`;
+  dlCSV([title,"",hdr.join(","),...rows].join("\n"),`Terpilih-DanaWakalah-${sesShort(sid)}.csv`);
+  toast("📥 Senarai terpilih berjaya dimuat turun!");
+}
+
+function exportBorang(sid){
+  if(!BORANG_REKOD[sid].length){toast("⚠️ Tiada rekod borang.");return;}
+  const hdr=["Bil","Nama","No.KP","No.Pendaftaran","Kelas","Tangga","PA","Sokongan","Tarikh","Status","Jumlah(RM)"];
+  const rows=BORANG_REKOD[sid].map((r,i)=>[i+1,`"${r.nama}"`,r.kp,r.no,r.kelas,r.tangga,`"${r.pa}"`,r.sokongan,r.tarikh,r.status,r.jumlah].join(","));
+  dlCSV([hdr.join(","),...rows].join("\n"),`Borang-DanaWakalah-${sesShort(sid)}.csv`);
+  toast("📥 Rekod borang dimuat turun!");
+}
+
+function dlCSV(csv,fn){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));
+  a.download=fn; a.click();
+}
+
+function printSelected(sid){
+  if(!SELECTED[sid].length){toast("⚠️ Tiada pelajar dipilih.");return;}
+  const rows=SELECTED[sid].map((p,i)=>`<tr><td>${i+1}</td><td>${p.kp||"—"}</td><td>${p.nama}</td><td>${p.no}</td><td>${p.kelas}</td><td>${p.pa}</td><td>${p.tangga}</td><td>RM ${p.jumlah.toLocaleString()}</td></tr>`).join("");
+  const w=window.open("","_blank");
+  w.document.write(`<html><head><title>Senarai Dana Wakalah</title>
+    <style>body{font-family:Arial,sans-serif;font-size:11px;padding:20px;}h2,h3{text-align:center;margin:4px 0;}
+    table{width:100%;border-collapse:collapse;margin-top:14px;}th,td{border:1px solid #ccc;padding:5px 7px;}
+    th{background:#dbeafe;font-weight:700;}
+    .sigrow{display:flex;gap:40px;margin-top:32px;}
+    .sigbox{flex:1;border:1px solid #ccc;padding:10px;}
+    </style></head><body>
+    <h2>POLITEKNIK SULTAN HAJI AHMAD SHAH (POLISAS)</h2>
+    <h3>SENARAI PENERIMA SUMBANGAN DANA WAKALAH ${sesLabel(sid).toUpperCase()}</h3>
+    <h3>JABATAN KEJURUTERAAN ELEKTRIK</h3>
+    <table><thead><tr><th>Bil</th><th>No. KP</th><th>Nama Penuh</th><th>No. Pendaftaran</th><th>Kelas</th><th>Nama PA</th><th>Tangga</th><th>Gaji (RM)</th></tr></thead>
+    <tbody>${rows}</tbody></table>
+    <div class="sigrow">
+      <div class="sigbox"><p>Disediakan oleh:</p><br><br><p>____________________________</p><p><b>Ain</b><br>Pegawai Kebajikan Pelajar<br>JKE POLISAS</p></div>
+      <div class="sigbox"><p>Disahkan oleh:</p><br><br><p>____________________________</p><p>Ketua Jabatan<br>JKE POLISAS</p></div>
+    </div></body></html>`);
+  w.document.close(); w.print();
+}
+
+/* ═══ TAB ═══ */
+function switchTab(id,btn){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("panel-"+id).classList.add("active");
+}
+
+/* ═══ BOOT ═══ */
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("live-date").textContent =
+    new Date().toLocaleDateString("ms-MY",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  buildPanels();
+  SESSIONS.forEach(s=>{
+    renderStats(s.id);
+    renderTable(s.id);
+    renderBorangForm(s.id);
+  });
+});
+</script>
+</body>
+</html>
